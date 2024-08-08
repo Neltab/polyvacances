@@ -1,0 +1,48 @@
+.rbc-day-slot .rbc-event {
+  border: none;
+  border-radius: 0px;
+}
+
+.rbc-calendar * {
+  color: black;
+}
+
+.rbc-label {
+  font-size: 10px;
+}
+
+.rbc-header {
+  font-size: 10px;
+}
+
+.rbc-day-slot .rbc-events-container {
+  margin-right: 2px;
+  margin-left: 3px;
+  border-left: none;
+}
+
+.rbc-event-label {
+  font-size: 10px;
+}
+
+.rbc-event-content {
+  font-size: 12px;
+  text-overflow: ellipsis;
+}
+
+.rbc-toolbar button {
+  border: none;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+  flex-grow: 0;
+}
+
+.popup-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+}
+
+.popup-content {
+  width: 720px;
+}

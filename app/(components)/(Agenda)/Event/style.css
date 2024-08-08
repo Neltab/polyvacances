@@ -1,0 +1,42 @@
+.event-modal {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.event-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 16px;
+}
+
+.event-text-container h2 {
+  font-weight: 700;
+  text-align: center;
+}
+
+.masonry {
+  height: 360px;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.new-event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.new-event-form select,
+.new-event-form option {
+  text-transform: capitalize;
+}
+
+.new-event-form-datetime-group {
+  display: flex;
+  gap: 8px;
+}
+
+.new-event-form-datetime-group input {
+  flex: 1;
+}

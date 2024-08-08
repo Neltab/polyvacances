@@ -1,0 +1,78 @@
+/* src/components/SpeedDial.css */
+.speed-dial {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.speed-dial-button {
+  background-color: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.speed-dial-button-opened {
+  transform: rotate(45deg);
+}
+
+.speed-dial-button:hover {
+  background-color: #334155;
+}
+
+.speed-dial-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 8px;
+  margin-right: 8px;
+}
+
+.speed-dial-action {
+  background-color: #334155;
+  color: #6200ea;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  position: relative;
+}
+
+.speed-dial-action:hover {
+  background-color: #f1f1f1;
+}
+
+.speed-dial-label {
+  background-color: #6200ea;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  position: absolute;
+  right: 0;
+  top: -15px;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.speed-dial-action:hover .speed-dial-label {
+  opacity: 1;
+}
