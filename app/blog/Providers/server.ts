@@ -29,7 +29,7 @@ export const uploadBlogArticle = async (article: string, author: string) => {
   }
 
   const formattedTitle = formatTitle(data.title);
-  const folderPath = path.join(process.cwd(), 'app/(components)/blog/articles', formattedTitle);
+  const folderPath = path.join(process.cwd(), 'app/blog/articles', formattedTitle);
 
   fs.mkdirSync(folderPath, { recursive: true });
 

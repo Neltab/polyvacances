@@ -14,7 +14,7 @@ import { COLORS } from '../../utils/colors';
 import Popup from 'reactjs-popup';
 import { EventPopup } from '../Event/EventPopup';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import AgendaSpeedDial from '../SpeedDial';
+import AgendaSpeedDial from '../AgendaSpeedDial';
 import { VacationContext } from './Providers/context';
 
 const localizer = momentLocalizer(moment)

@@ -1,5 +1,6 @@
 'use client'
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider'
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
 import {
   isServer,
@@ -7,6 +8,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { SessionProvider } from "next-auth/react"
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -46,7 +48,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        {children}
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          {children}
+        </LocalizationProvider>
       </SessionProvider>
     </QueryClientProvider>
   )

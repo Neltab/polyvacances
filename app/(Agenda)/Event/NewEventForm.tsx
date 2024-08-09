@@ -6,6 +6,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCreateEvent } from "./Providers/client";
 import { useContext } from "react";
 import { VacationContext } from "../Vacation/Providers/context";
+import TextField from '@mui/material/TextField';
+import MenuItem from "@mui/material/MenuItem";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 export const NewEventPopup = () => {
   const { vacations } = useContext(VacationContext);
@@ -19,23 +22,23 @@ export const NewEventPopup = () => {
         <h2>Nouvel évènement</h2>
       </div>
       <form className='new-event-form' action={createEventMutation.mutate}>
-        <select name='vacationId'>
+        <TextField select label="Vacances" name='vacationId'>
           {vacations.map((vacation) => (
-            <option key={vacation.id} value={vacation.id}>{vacation.location}</option>
+            <MenuItem key={vacation.id} value={vacation.id}>{vacation.location}</MenuItem>
           ))}
-        </select>
-        <input type="text" placeholder="Titre" name="title" />
-        <textarea placeholder="Description" name="description"/>
-        <input type="text" placeholder="Endroit" name="location" />
+        </TextField>
+        <TextField type="text" label="Titre" name="title" />
+        <TextField multiline label="Description" name="description"/>
+        <TextField type="text" label="Endroit" name="location" />
         <div className="new-event-form-datetime-group">
-          <input type="datetime-local" name="start"/>
-          <input type="datetime-local" name="end"/>
+          <DateTimePicker label="Début" name="start"/>
+          <DateTimePicker label="Fin" name="end"/>
         </div>
-        <select name='tag'>
+        <TextField select label="Type d'évènement" name='tag'>
           {Object.keys(tag).map((tag) => (
-            <option key={tag} value={tag}>{tag.toLowerCase()}</option>
+            <MenuItem key={tag} value={tag}>{tag.toLowerCase()}</MenuItem>
           ))}
-        </select>
+        </TextField>
         <button type="submit">Créer</button>
       </form>
     </div>

@@ -40,7 +40,7 @@
 
 .speed-dial-action {
   background-color: #334155;
-  color: #6200ea;
+  color: white;
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -60,13 +60,12 @@
 }
 
 .speed-dial-label {
-  background-color: #6200ea;
+  background-color: #334155;
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
   position: absolute;
-  right: 0;
-  top: -15px;
+  top: -20px;
   transform: translateY(-50%);
   white-space: nowrap;
   opacity: 0;

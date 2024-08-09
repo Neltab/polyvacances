@@ -1,7 +1,7 @@
 'use client'
 
-import FileUploadForm from '@/app/(components)/Form/FilesUpload';
-import { COLORS } from '@/app/(components)/utils/colors';
+import FileUploadForm from '@/app/Form/FilesUpload';
+import { COLORS } from '@/app/utils/colors';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import { Event } from './types';
 import './style.css'
@@ -32,7 +32,7 @@ export const EventPopup = ({event}: EventPopupProps) => {
         <Masonry className="masonry" gutter="10px">
           {photos.map((photo, index) => (
             <div key={index} className="masonry-item">
-              <Image src={photo.photoUrl} alt="photo" />
+              <img src={photo.photoUrl} alt="photo" />
             </div>
           ))}
         </Masonry>

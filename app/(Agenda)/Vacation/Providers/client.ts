@@ -1,7 +1,7 @@
 'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { getVacations, getVacationById, getVacationsWithEvents, getVacationWithEventsById } from "./server";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { getVacations, getVacationById, getVacationsWithEvents, getVacationWithEventsById, createVacation } from "./server";
 
 
 export const useGetVacations = () => useQuery({
@@ -26,3 +26,11 @@ export const useGetVacationWithEventsById = (id: number) => useQuery({
   queryKey: ["vacationsWithEvents", id],
   queryFn: () => getVacationWithEventsById(id),
 });
+
+export const useCreateVacation = (queryClient: QueryClient) => useMutation({
+  mutationFn: (formData: FormData) => createVacation(formData),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["vacations"] })
+    queryClient.invalidateQueries({ queryKey: ["vacationsWithEvents"] });
+  } 
+})

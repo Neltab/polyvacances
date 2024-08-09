@@ -1,5 +1,5 @@
 'use server'
-import prisma from "@/app/(components)/utils/db";
+import prisma from "@/app/utils/db";
 import path from "path";
 import fs from "fs";
 import { z } from "zod";
@@ -35,7 +35,7 @@ export const uploadImages = async (eventId: number, formData: FormData) => {
 };
 
 export const createEvent = async (formData: FormData) => {
-  console.log(Object.fromEntries(formData.entries()));
+
   const eventSchema = z.object({
     vacationId: z.string().transform(Number),
     title: z.string(),

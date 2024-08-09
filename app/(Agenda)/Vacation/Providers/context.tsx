@@ -44,7 +44,7 @@ export const VacationProvider = ({ children }: VacationProviderProps) => {
       const lastIndex = vacations.length - 1;
       setVacationFromIndex(lastIndex);
     }
-  }, [vacations]);
+  }, [vacations, setVacationFromIndex]);
   
   if (status !== 'success') {
     return <div>Loading...</div>

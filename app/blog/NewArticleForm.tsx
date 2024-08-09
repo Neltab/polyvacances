@@ -12,7 +12,7 @@ date: ${moment().format('YYYY-MM-DD')}
 thumbnail: **REMPLACER PAR L'URL DE L'IMAGE (optionnel)**
 ---`;
 
-export const MardkdownEditor = () => {
+export default () => {
   const [value, setValue] = useState(DEFAULT_TEXT);
   return (
     <div className="container">

@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import './SpeedDial.css';
 import { FiPlus } from "react-icons/fi";
-import Popup from 'reactjs-popup';
-import { NewEventPopup } from '../(Agenda)/Event/NewEventPopup';
 
-const actions = [
-  { icon: '✉️', name: 'Email' },
-  { icon: '📞', name: 'Call' },
-  { icon: '🗺️', name: 'Navigate' },
-];
+type SpeedDialProps = {
+  actions: {
+    icon: ReactNode,
+    name: string,
+    onClick: () => void
+  }[]
+}
 
-const SpeedDial = () => {
+export default ({ actions }: SpeedDialProps) => {
   const [open, setOpen] = useState(false);
   const [forceOpen, setForceOpen] = useState(false);
-
-  const [popupOpen, setPopupOpen] = useState(false);
 
   const handleToggle = () => {
     setForceOpen(!forceOpen);
@@ -31,18 +29,13 @@ const SpeedDial = () => {
       {isOpen && (
         <div className="speed-dial-actions">
           {actions.map((action, index) => (
-            <button key={index} className="speed-dial-action" onClick={() => setPopupOpen(true)}>
+            <button key={index} className="speed-dial-action" onClick={action.onClick}>
               {action.icon}
               <span className="speed-dial-label">{action.name}</span>
             </button>
           ))}
         </div>
       )}
-      <Popup open={popupOpen} closeOnDocumentClick onClose={() => setPopupOpen(false)}>
-        <NewEventPopup />
-      </Popup>
     </div>
   );
 };
-
-export default SpeedDial;
