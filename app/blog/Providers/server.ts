@@ -9,8 +9,12 @@ import { unified } from "unified";
 import matter from "gray-matter";
 import prisma from "../../utils/db";
 
+export const getAllArticles = () => {
+  return prisma.article.findMany({});
+}
+
 export const createArticle = (author: string, title: string, date: string, thumbnail?: string) => {
-  prisma.article.create({
+  return prisma.article.create({
     data: {
       title,
       date,

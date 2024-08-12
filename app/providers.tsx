@@ -9,6 +9,8 @@ import {
 } from '@tanstack/react-query'
 import { SessionProvider } from "next-auth/react"
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { createTheme, ThemeProvider } from '@mui/material'
+import { grey, red } from '@mui/material/colors'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -38,6 +40,16 @@ function getQueryClient() {
   }
 }
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: grey[700],
+      main: grey[800],
+      dark: grey[900],
+    },
+  },
+});
+
 export default function Providers({ children }: { children: React.ReactNode }) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
@@ -48,9 +60,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-        <LocalizationProvider dateAdapter={AdapterMoment}>
-          {children}
-        </LocalizationProvider>
+        <ThemeProvider theme={theme}>
+          <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="fr">
+            {children}
+          </LocalizationProvider>
+        </ThemeProvider>
       </SessionProvider>
     </QueryClientProvider>
   )

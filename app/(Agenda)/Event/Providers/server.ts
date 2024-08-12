@@ -2,9 +2,7 @@
 import prisma from "@/app/utils/db";
 import path from "path";
 import fs from "fs";
-import { z } from "zod";
-
-const EVENT_TAGS = ["TRANSPORT", "LOGISTIQUE", "NATURE", "MONUMENT", "VILLE", "VILLAGE", "ACTIVITE", "RESTAURANT"] as const;
+import { eventSchema, NewEvent } from "../types";
 
 export const getEventsPhotos = async (eventId: number) => prisma.eventPhotos.findMany({
   where: {
@@ -34,19 +32,12 @@ export const uploadImages = async (eventId: number, formData: FormData) => {
   }
 };
 
-export const createEvent = async (formData: FormData) => {
+export const createEvent = async (data: NewEvent) => {
+  console.log(data)
 
-  const eventSchema = z.object({
-    vacationId: z.string().transform(Number),
-    title: z.string(),
-    description: z.string(),
-    tag: z.enum(EVENT_TAGS),
-    start: z.string().transform((value) => new Date(value).toISOString()),
-    end: z.string().transform((value) => new Date(value).toISOString()),
-    location: z.string(),
-  });
+  const event = eventSchema.parse(data);
 
-  const event = eventSchema.parse(Object.fromEntries(formData.entries()));
+  console.log(event);
 
   return prisma.event.create({
     data: {

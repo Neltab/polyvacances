@@ -34,8 +34,16 @@
   border: none;
 }
 
+.rbc-toolbar {
+  gap: 8px;
+}
+
 .rbc-toolbar .rbc-toolbar-label {
   flex-grow: 0;
+}
+
+.rbc-allday-cell {
+  display: none;
 }
 
 .popup-overlay {
@@ -43,6 +51,17 @@
   display: flex;
 }
 
-.popup-content {
-  width: 720px;
+.new-vacation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.new-vacation-form-datetime-group {
+  display: flex;
+  gap: 8px;
+}
+
+.calendar-container {
+  flex-grow: 4;
 }

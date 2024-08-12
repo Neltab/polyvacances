@@ -1,9 +1,15 @@
 'use server'
 
 import prisma from "@/app/utils/db";
+import moment from "moment";
 import { z } from "zod";
+import { NewVacation, vacationSchema } from "../types";
 
-export const getVacations = async () => prisma.vacation.findMany({});
+export const getVacations = async () => prisma.vacation.findMany({
+  orderBy: {
+    startDate: "asc"
+  }
+});
 
 export const getVacationById = async (id: number) => prisma.vacation.findUnique({
   where: { id }
@@ -22,14 +28,8 @@ export const getVacationWithEventsById = async (id: number) => prisma.vacation.f
   }
 });
 
-export const createVacation = (formData: FormData) => {
-  const vacationSchema = z.object({
-    startDate: z.string().transform(startDate => new Date(startDate)),
-    endDate: z.string().transform(startDate => new Date(startDate)),
-    location: z.string(),
-  })
-
-  const vacation = vacationSchema.parse(Object.fromEntries(formData.entries()))
+export const createVacation = (data: NewVacation) => {
+  const vacation = vacationSchema.parse(data)
 
   return prisma.vacation.create({
     data: {

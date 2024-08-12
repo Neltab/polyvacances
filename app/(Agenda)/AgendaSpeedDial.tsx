@@ -1,36 +1,37 @@
-import { useState, useMemo } from "react";
-import Popup from 'reactjs-popup';
+'use client'
+
+import { useState } from "react";
+import Popup from '@/app/UI/Popup/Popup'
 import { NewEventPopup } from '../(Agenda)/Event/NewEventForm';
 import { TbBeach } from "react-icons/tb";
 import { MdEvent, MdArticle } from "react-icons/md";
 import NewVacationPopup from '../(Agenda)/Vacation/NewVacationForm';
 import NewArticleForm from '../blog/NewArticleForm';
-import SpeedDial from "../UI/SpeedDial";
+import SpeedDial from "../UI/SpeedDial/SpeedDial";
+import useToggleState from "../hooks/useToggleState";
 
 export default () => {
 
-  const [eventPopupOpen, setEventPopupOpen] = useState(false);
-  const [vacationPopupOpen, setVacationPopupOpen] = useState(false);
-  const [articlePopupOpen, setArticlePopupOpen] = useState(false);
+  const [eventPopupOpen, toggleEventPopupOpen] = useToggleState(false);
+  const [vacationPopupOpen, toggleVacationPopupOpen] = useToggleState(false);
+  const [articlePopupOpen, toggleArticlePopupOpen] = useToggleState(false);
 
-  const actions = useMemo(() => [
-    { icon: <TbBeach />, name: 'Nouvelles vacances', onClick: () => setVacationPopupOpen(true) },
-    { icon: <MdEvent />, name: 'Nouvel évènement', onClick: () => setEventPopupOpen(true) },
-    { icon: <MdArticle />, name: 'Nouvel article de blog', onClick: () => setArticlePopupOpen(true) },
-  ], [setEventPopupOpen]);
+  const actions = [
+    { icon: <TbBeach />, name: 'Nouvelles vacances', onClick: () => toggleVacationPopupOpen(), open: vacationPopupOpen, popup: <NewVacationPopup toggleOpen={toggleVacationPopupOpen} /> },
+    { icon: <MdEvent />, name: 'Nouvel évènement', onClick: () => toggleEventPopupOpen(), open: eventPopupOpen, popup: <NewEventPopup toggleOpen={toggleEventPopupOpen}/> },
+    { icon: <MdArticle />, name: 'Nouvel article de blog', onClick: () => toggleArticlePopupOpen(), open: articlePopupOpen, popup: <NewArticleForm /> },
+  ];
 
   return (
     <>
       <SpeedDial actions={actions} />
-      <Popup open={eventPopupOpen} closeOnDocumentClick onClose={() => setEventPopupOpen(false)}>
-        <NewEventPopup />
-      </Popup>
-      <Popup open={vacationPopupOpen} closeOnDocumentClick onClose={() => setVacationPopupOpen(false)}>
-        <NewVacationPopup />
-      </Popup>
-      <Popup open={articlePopupOpen} closeOnDocumentClick onClose={() => setArticlePopupOpen(false)}>
-        <NewArticleForm />
-      </Popup>
+      {
+        actions.map(action => (
+          <Popup title={action.name} open={action.open} onClose={action.onClick}>
+            {action.popup}
+          </Popup> 
+        ))
+      }
     </>
   );
 }

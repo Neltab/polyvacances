@@ -2,6 +2,7 @@
 
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { getVacations, getVacationById, getVacationsWithEvents, getVacationWithEventsById, createVacation } from "./server";
+import { NewVacation } from "../types";
 
 
 export const useGetVacations = () => useQuery({
@@ -28,7 +29,7 @@ export const useGetVacationWithEventsById = (id: number) => useQuery({
 });
 
 export const useCreateVacation = (queryClient: QueryClient) => useMutation({
-  mutationFn: (formData: FormData) => createVacation(formData),
+  mutationFn: (data: NewVacation) => createVacation(data),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["vacations"] })
     queryClient.invalidateQueries({ queryKey: ["vacationsWithEvents"] });

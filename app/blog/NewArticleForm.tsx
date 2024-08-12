@@ -5,6 +5,9 @@ import { useState } from "react";
 import rehypeSanitize from "rehype-sanitize";
 import { uploadBlogArticle } from "./Providers/server";
 import moment from "moment";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import Button from "@mui/material/Button"
 
 const DEFAULT_TEXT = `---
 title: **REMPLACER PAR LE TITRE**
@@ -14,16 +17,23 @@ thumbnail: **REMPLACER PAR L'URL DE L'IMAGE (optionnel)**
 
 export default () => {
   const [value, setValue] = useState(DEFAULT_TEXT);
+  const { data: session, status } = useSession()
+
+  if (status !== "authenticated") {
+    redirect("/auth/login");
+  }
+
   return (
     <div className="container">
       <MDEditor
         value={value}
+        height={500}
         onChange={(value) => setValue(value || "")}
         previewOptions={{
           rehypePlugins: [[rehypeSanitize]],
         }}
       />
-      <button onClick={() => uploadBlogArticle(value, "Aurélien")}>Log</button>
+      <Button variant="contained" onClick={() => uploadBlogArticle(value, session?.user?.name)}>Envoyer</Button>
     </div>
   );
 }

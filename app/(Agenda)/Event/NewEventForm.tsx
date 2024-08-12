@@ -9,38 +9,68 @@ import { VacationContext } from "../Vacation/Providers/context";
 import TextField from '@mui/material/TextField';
 import MenuItem from "@mui/material/MenuItem";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import Button from "@mui/material/Button";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Event, eventSchema, NewEvent } from "./types";
 
-export const NewEventPopup = () => {
+type NewEventPopupProps = {
+  toggleOpen: () => void,
+}
+
+export const NewEventPopup = ({ toggleOpen }: NewEventPopupProps) => {
+  const { control, handleSubmit } = useForm<Event | NewEvent>({
+    resolver: zodResolver(eventSchema)
+  });
+
   const { vacations } = useContext(VacationContext);
   const queryClient = useQueryClient();
 
   const createEventMutation = useCreateEvent(queryClient);
+  
+  const onSubmit: SubmitHandler<NewEvent> = (data) => createEventMutation.mutate(data, {
+    onSuccess: () => { toggleOpen() }
+  })
 
   return (
-    <div className="event-modal" style={{backgroundColor: 'white'}}>
-      <div className='event-text-container'>
-        <h2>Nouvel évènement</h2>
-      </div>
-      <form className='new-event-form' action={createEventMutation.mutate}>
-        <TextField select label="Vacances" name='vacationId'>
+    <form className='new-event-form' onSubmit={handleSubmit(onSubmit)}>
+      <Controller name="vacationId" control={control} render={({field}) => (
+        <TextField select label="Vacances" {...field}>
           {vacations.map((vacation) => (
             <MenuItem key={vacation.id} value={vacation.id}>{vacation.location}</MenuItem>
           ))}
         </TextField>
-        <TextField type="text" label="Titre" name="title" />
-        <TextField multiline label="Description" name="description"/>
-        <TextField type="text" label="Endroit" name="location" />
-        <div className="new-event-form-datetime-group">
-          <DateTimePicker label="Début" name="start"/>
-          <DateTimePicker label="Fin" name="end"/>
-        </div>
-        <TextField select label="Type d'évènement" name='tag'>
+      )}/>
+
+      <Controller name="title" control={control} render={({field}) => (
+        <TextField type="text" label="Titre" {...field} />
+      )}/>
+
+      <Controller name="description" control={control} render={({field}) => (
+        <TextField multiline label="Description" {...field}/>
+      )}/>
+
+      <Controller name="location" control={control} render={({field}) => (
+        <TextField type="text" label="Endroit" {...field} />
+      )}/>
+
+      <div className="new-event-form-datetime-group">
+        <Controller name="start" control={control} render={({field}) => (
+          <DateTimePicker label="Début" {...field}/>
+        )}/>
+        <Controller name="end" control={control} render={({field}) => (
+          <DateTimePicker label="Fin" {...field}/>
+        )}/>
+      </div>
+      <Controller name="tag" control={control} render={({field}) => (
+        <TextField select label="Type d'évènement" {...field}>
           {Object.keys(tag).map((tag) => (
             <MenuItem key={tag} value={tag}>{tag.toLowerCase()}</MenuItem>
           ))}
         </TextField>
-        <button type="submit">Créer</button>
-      </form>
-    </div>
+      )}/>
+
+      <Button variant="contained" type="submit">Ajouter</Button>
+    </form>
   );
 }

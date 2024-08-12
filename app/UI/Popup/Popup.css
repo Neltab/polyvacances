@@ -1,0 +1,20 @@
+.popup-content {
+  max-width: 1024px;
+}
+
+.popup-modal {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.popup-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 16px;
+}
+
+.popup-text-container h2 {
+  font-weight: 700;
+  text-align: center;
+}

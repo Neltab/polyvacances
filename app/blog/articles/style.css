@@ -1,0 +1,29 @@
+.article-list-container {
+  flex-grow: 1;
+  padding: 20px 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.article-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.article img {
+  max-width: 250px;
+}
+
+.article h2 {
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.article p {
+  color: #475569;
+  font-size: 12px;
+}

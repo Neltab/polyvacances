@@ -25,3 +25,9 @@ body {
     text-wrap: balance;
   }
 }
+
+.calendar-blog-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
