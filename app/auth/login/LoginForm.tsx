@@ -7,8 +7,11 @@ import { signIn } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import styles from './LoginForm.module.css';
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const { control, handleSubmit } = useForm<Credentials>({
     resolver: zodResolver(credentialsSchema)
@@ -18,7 +21,7 @@ const LoginForm = () => {
     signIn("credentials", {
       email: credentials.email,
       password: credentials.password,
-      redirect: true,
+      callbackUrl: callbackUrl || undefined,
     });
   }
 

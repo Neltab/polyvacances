@@ -1,16 +1,16 @@
 import { getMyVacations } from "@/app/api/vacations/Providers/server";
-import { Button } from "@mui/material";
 import { getServerSession } from "next-auth"
 import Link from "next/link";
+import SignInButton from "./SignInButton";
 
 export default async function VacationList() {
   const session = await getServerSession();
 
   if (!session) {
     return (
-      <div>
+      <div className="max-w-[100px]">
         <h1>Connectez vous pour accéder à vos vacances</h1>
-        <Button variant="contained" href="/api/auth/signin">Se connecter</Button>
+        <SignInButton />
       </div>
     )
   }

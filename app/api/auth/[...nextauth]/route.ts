@@ -16,22 +16,6 @@ const handler = NextAuth({
     error: '/auth/error',
   },
 
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      return true
-    },
-    async redirect({ url, baseUrl }) {
-      console.log(url, baseUrl)
-      return baseUrl
-    },
-    async session({ session, token, user }) {
-      return session
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      return token
-    }
-  },
-
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
