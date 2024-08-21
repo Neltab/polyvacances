@@ -2,12 +2,13 @@
 
 import { Credentials, credentialsSchema } from "@/app/api/auth/user/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { signIn } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import styles from './LoginForm.module.css';
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const LoginForm = () => {
   const searchParams = useSearchParams()
@@ -35,9 +36,9 @@ const LoginForm = () => {
         <Controller name="password" control={control} render={({field}) => (
           <TextField type="password" label="Mot de passe" {...field} />
         )}/>
-        <Button variant="contained" type="submit">Connexion</Button>
+        <Button type="submit">Connexion</Button>
       </form>
-      <Link href="/auth/register" className={styles.registerLink}>S&apos;inscrire</Link>
+      <Link href={`/auth/register?callbackUrl=${callbackUrl}`} className={styles.registerLink}>S&apos;inscrire</Link>
     </div>
   )
 }
