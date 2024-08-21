@@ -9,19 +9,19 @@ type ArticleProps = {
   thumbnail: string | null;
 }
 
-export default ({
+export default function Article({
   title,
   thumbnail,
   link,
   date,
   author,
-}: ArticleProps) => {
+}: ArticleProps) {
 
   return (
     <Link href={link} className="article">
       {
         thumbnail &&
-        <img src={thumbnail} />
+        <img src={thumbnail} alt=""/>
       }
       <h2 className="article-title">{title}</h2>
       <p className="article-description">Par {author} - {moment(date).format("DD/MM/YYYY")}</p>

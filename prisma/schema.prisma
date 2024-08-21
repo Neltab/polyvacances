@@ -15,14 +15,16 @@ datasource db {
 
 model Vacation {
   id          Int      @id @default(autoincrement())
+  uuid        String   @unique @default(cuid())
   startDate   DateTime
   endDate     DateTime
   location    String
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   events Event[]
-  users  User[]
+  participants  User[]
 }
 
 enum tag {

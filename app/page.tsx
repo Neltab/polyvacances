@@ -1,10 +1,5 @@
-import 'moment/locale/fr';
-import VacationCalendar from "@/app/(Agenda)/Vacation/VacationCalendar";
-import { VacationProvider } from './(Agenda)/Vacation/Providers/context';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import AgendaSpeedDial from './(Agenda)/AgendaSpeedDial';
-import ArticlesList from './blog/articles/ArticlesList';
 
 export default async function Home() {
   const session = await getServerSession();
@@ -15,13 +10,6 @@ export default async function Home() {
 
   return (
     <main>
-      <VacationProvider>
-        <div className='calendar-blog-container'>
-          <VacationCalendar />
-          <ArticlesList />
-        </div>
-        <AgendaSpeedDial />
-      </VacationProvider>
     </main>
   );
 }

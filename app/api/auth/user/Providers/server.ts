@@ -1,7 +1,7 @@
 'use server'
-import prisma from "@/app/utils/db";
-import { z } from "zod";
+import prisma from "@/lib/utils/db";
 import bcrypt from "bcryptjs";
+import { NewUser, userSchema } from "../types";
 
 export const getUser = (email: string) => {
   return prisma.user.findFirst({
@@ -11,15 +11,18 @@ export const getUser = (email: string) => {
   });
 }
 
-export const createUser = async (formData: FormData) => {
-
-  const userSchema = z.object({
-    email: z.string().email(),
-    password: z.string(),
-    name: z.string(),
+export const getUsers = async () => {
+  return prisma.user.findMany({
+    select: {
+      email: true,
+      name: true,
+      id: true,
+    }
   });
+}
 
-  const user = userSchema.parse(Object.fromEntries(formData.entries()));
+export const createUser = async (data: NewUser) => {
+  const user = userSchema.parse(data);
 
   return prisma.user.create({
     data: {

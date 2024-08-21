@@ -7,7 +7,7 @@ import rehypeParse from 'rehype-parse';
 import rehypeStringify from 'rehype-stringify';
 import { unified } from "unified";
 import matter from "gray-matter";
-import prisma from "../../utils/db";
+import prisma from "../../../lib/utils/db";
 
 export const getAllArticles = () => {
   return prisma.article.findMany({});

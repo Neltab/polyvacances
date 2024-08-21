@@ -15,11 +15,11 @@ date: ${moment().format('YYYY-MM-DD')}
 thumbnail: **REMPLACER PAR L'URL DE L'IMAGE (optionnel)**
 ---`;
 
-export default () => {
+export default function NewArticleForm() {
   const [value, setValue] = useState(DEFAULT_TEXT);
   const { data: session, status } = useSession()
 
-  if (status !== "authenticated") {
+  if (status !== "authenticated" || !session || !session.user || !session.user.name) {
     redirect("/auth/login");
   }
 
@@ -33,7 +33,7 @@ export default () => {
           rehypePlugins: [[rehypeSanitize]],
         }}
       />
-      <Button variant="contained" onClick={() => uploadBlogArticle(value, session?.user?.name)}>Envoyer</Button>
+      <Button variant="contained" onClick={() => uploadBlogArticle(value, session?.user?.name as string)}>Envoyer</Button>
     </div>
   );
 }

@@ -16,6 +16,22 @@ const handler = NextAuth({
     error: '/auth/error',
   },
 
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      console.log(url, baseUrl)
+      return baseUrl
+    },
+    async session({ session, token, user }) {
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token
+    }
+  },
+
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -28,22 +44,20 @@ const handler = NextAuth({
         email: { label: "Email", type: "text", },
         password: { label: "Mot de passe", type: "password" }
       },
+      
       async authorize(credentials) {
-        console.log("credentials", credentials)
         if(!credentials) {
           return null;
         }
 
         const user = await getUser(credentials.email)
 
-        console.log("user", "user")
         if(!user) {
           return null;
         }
 
         const passwordMatch = await bcrypt.compare(credentials.password, user.password)
-        console.log("passwordMatch : ", passwordMatch)
-  
+
         if (!passwordMatch) {
           return null;
         }
@@ -52,7 +66,7 @@ const handler = NextAuth({
           ...user,
           id: user.id.toString(),
         }
-      }
+      },
     })
   ],
 })
