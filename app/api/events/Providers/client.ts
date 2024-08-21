@@ -16,7 +16,7 @@ export const useGetEventPhotos = (eventId: number) => useQuery({
 });
 
 export const useUploadImages = (queryClient: QueryClient, eventId: number) => useMutation({
-  mutationFn: (formData: FormData) => uploadImages(eventId, formData),
+  mutationFn: async (formData: FormData) => uploadImages(eventId, formData),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["vacationsWithEvents"] })
     queryClient.invalidateQueries({ queryKey: ["eventPhotos"] })

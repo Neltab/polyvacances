@@ -1,6 +1,6 @@
 'use client'
 
-import { useGetEventPhotos } from "@/app/api/events/Providers/client";
+import { useGetEventPhotos, useUploadImages } from "@/app/api/events/Providers/client";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Event } from "@/app/api/events/types"
 import { useMemo, useState, useCallback } from "react";
@@ -8,6 +8,8 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import ImageViewer from 'react-simple-image-viewer';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 
 type EventDialogProps = {
   open: boolean,
@@ -20,9 +22,12 @@ export default function EventDialog({
   onClose,
   event,
 }: EventDialogProps) {
-  const {data: photos, status} = useGetEventPhotos(event.id);
+  const queryClient = useQueryClient();
 
-  const photosSrc = useMemo(() => photos?.map(photo => `/${photo.photoUrl}`), [photos])
+  const {data: photos, status} = useGetEventPhotos(event.id);
+  const photoMutation = useUploadImages(queryClient, event.id);
+
+  const photosSrc = useMemo(() => photos?.map(photo => `${photo.photoUrl}`), [photos])
 
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -51,15 +56,18 @@ export default function EventDialog({
               {event.description}
             </DialogDescription>
           </DialogHeader>
-          <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="picture">Ajouter des photos</Label>
-            <Input id="picture" type="file" />
-          </div>
+          <form className="flex justify-between w-full items-center gap-1.5" action={photoMutation.mutate}>
+            <div>
+              <Label htmlFor="picture">Ajouter des photos</Label>
+              <Input id="picture" name='images' multiple accept="image/png, image/jpeg" type="file" />
+            </div>
+            <Button type="submit">Ajouter</Button>
+          </form>
           <ResponsiveMasonry>
             <Masonry className="masonry" gutter="10px">
               {photos.map((photo, index) => (
                 <div key={index} className="masonry-item">
-                  <img src={`/${photo.photoUrl}`} alt="photo" onClick={ () => openImageViewer(index) } />
+                  <img src={`${photo.photoUrl}`} alt="photo" onClick={ () => openImageViewer(index) } />
                 </div>
               ))}
               </Masonry>

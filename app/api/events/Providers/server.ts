@@ -19,7 +19,7 @@ export const getEventsPhotos = async (eventId: number) => prisma.eventPhotos.fin
 
 export const uploadImages = async (eventId: number, formData: FormData) => {
   const formDataEntryValues = Array.from(formData.values());
-  
+
   for (const formDataEntryValue of formDataEntryValues) {
     if (
       typeof formDataEntryValue === "object" &&
@@ -28,10 +28,11 @@ export const uploadImages = async (eventId: number, formData: FormData) => {
       const file = formDataEntryValue;
       const buffer = Buffer.from(await file.arrayBuffer());
       const filePath = path.join(process.cwd(), 'public/uploads', file.name);
+      console.log(filePath);
       await prisma.eventPhotos.create({
         data: {
           eventId,
-          photoUrl: "uploads/" + file.name,
+          photoUrl: "/uploads/" + file.name,
         },
       });
       fs.writeFileSync(filePath, buffer);
