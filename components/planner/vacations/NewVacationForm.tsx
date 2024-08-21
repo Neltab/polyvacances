@@ -73,20 +73,6 @@ const NewVacationForm = ({ toggleOpen }: NewVacationPopupProps) => {
             </FormItem>
           )}
         />
-        {/* <Controller name="participants" control={control} render={({field}) => (
-          <Select 
-            placeholder="Participants"
-            isMulti
-            styles={{menu: (provided) => ({...provided, zIndex: 9999})}}
-            options={userOptions}
-            {...field}
-          />
-        )}/> */}
-
-{/* 
-        <Controller name="location" control={control} render={({field, fieldState: {invalid, error}}) => (
-          <TextField required type="text" label="Endroit" {...field} error={invalid} helperText={error?.message} />
-        )}/> */}
 
         <FormField
           control={form.control}
@@ -101,35 +87,7 @@ const NewVacationForm = ({ toggleOpen }: NewVacationPopupProps) => {
             </FormItem>
           )}
         />
-
-        {/* <div className="new-vacation-form-datetime-group">
-          <Controller name="date.from" control={control} render={({field, fieldState: {invalid, error}}) => (
-            <DatePicker
-              label="Début"
-              {...field}
-              slotProps={{
-                textField: {
-                  error: invalid,
-                  helperText: error?.message,
-                  required: true,
-                },
-              }}
-            />
-          )}/>
-          <Controller name="date.to" control={control} render={({field, fieldState: {invalid, error}}) => (
-            <DatePicker 
-              label="Fin"
-              {...field}
-              slotProps={{
-                textField: {
-                  error: invalid,
-                  helperText: error?.message,
-                  required: true,
-                },
-              }}
-            />
-          )}/>
-        </div> */}
+        
         <Button type="submit" className="flex-none">Envoyer</Button>
       </form>
     </Form>

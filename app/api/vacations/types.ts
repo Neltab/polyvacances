@@ -1,5 +1,5 @@
 import { WithoutDBMetadata } from "@/lib/utils/db";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { z } from "zod";
 
 export type Vacation = Prisma.VacationGetPayload<{
@@ -18,3 +18,5 @@ export type VacationWithEvents = Prisma.VacationGetPayload<{
 }>
 
 export type NewVacation = Partial<Vacation>;
+
+export type Participant = Omit<WithoutDBMetadata<User>, "password">;

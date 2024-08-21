@@ -32,3 +32,9 @@ export const vacationSchema = z.object({
     });
   }
 });
+
+export type ParticipantsSchema = z.infer<typeof participantsSchema>;
+
+export const participantsSchema = z.object({
+  participants: z.array(z.object({ value: z.coerce.number(), label: z.string() })),
+});

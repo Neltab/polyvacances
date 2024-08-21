@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/utils/db";
 import { getServerSession } from "next-auth";
-import { VacationSchema, vacationSchema } from "./validation";
+import { participantsSchema, ParticipantsSchema, VacationSchema, vacationSchema } from "./validation";
 import { revalidatePath } from "next/cache";
 
 export const getVacations = async () => prisma.vacation.findMany({
@@ -138,7 +138,13 @@ export const getVacationParticipants = async (uuid: string) => {
   const vacation = await prisma.vacation.findUnique({
     where: { uuid },
     include: {
-      participants: true
+      participants: {
+        select: {
+          email: true,
+          id: true,
+          name: true,
+        }
+      }
     }
   });
 
@@ -168,4 +174,23 @@ export const canEditVacation = async (vacationUUID: string) => {
   }
 
   return vacation.participants.some(participant => participant.email === session.user?.email);
+}
+
+export const updateParticipants = async (vacationUUID: string, data: ParticipantsSchema) => {
+  const {participants} = participantsSchema.parse(data);
+
+  const vacation = await prisma.vacation.update({
+    where: {
+      uuid: vacationUUID
+    },
+    data: {
+      participants: {
+        set: participants.map(({ value: id }) => ({ id }))
+      }
+    }
+  });
+
+  revalidatePath(`/planner/vacation/${vacationUUID}/layout`);
+
+  return vacation;
 }
