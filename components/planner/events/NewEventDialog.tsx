@@ -6,7 +6,6 @@ import { NewEvent, UpdateEvent } from "@/app/api/events/types";
 type NewEventDialogProps = {
   open: boolean,
   onClose: () => void,
-  vacations: VacationWithEvents[],
   vacation: VacationWithEvents,
   event?: Partial<NewEvent> | UpdateEvent,
 }
@@ -14,7 +13,6 @@ type NewEventDialogProps = {
 export default function NewEventDialog({
   open,
   onClose,
-  vacations,
   vacation,
   event,
 }: NewEventDialogProps) {
@@ -22,9 +20,9 @@ export default function NewEventDialog({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Nouvel événement</DialogTitle>
+          <DialogTitle>Nouvelle activité</DialogTitle>
         </DialogHeader>
-        <NewEventForm vacation={vacation} vacations={vacations} event={event} toggleOpen={onClose}/>
+        <NewEventForm vacation={vacation} event={event} toggleOpen={onClose}/>
       </DialogContent>
     </Dialog>
   )

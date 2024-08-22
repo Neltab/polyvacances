@@ -12,10 +12,6 @@ const handler = NextAuth({
 
   callbacks: {
     async jwt({ token, account, profile }) {
-      if (account) {
-        token.id = account.id
-        
-      }
       return token
     }
   },

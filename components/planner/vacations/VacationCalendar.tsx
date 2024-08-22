@@ -31,13 +31,11 @@ const localizer = dateFnsLocalizer({
 type Range = { start: Date, end: Date }
 
 type VacationCalendarProps = {
-  vacations: VacationWithEvents[],
   vacation: VacationWithEvents,
   editable?: boolean,
 }
 
 export default function VacationCalendar({
-  vacations,
   vacation,
   editable = false,
 }: VacationCalendarProps) {
@@ -111,12 +109,12 @@ export default function VacationCalendar({
       />
       {
         eventSelected &&
-        <EventDialog open={eventPopupOpen} onClose={() => setEventPopupOpen(false)} event={eventSelected} />
+        <EventDialog open={eventPopupOpen} vacation={vacation} onClose={() => setEventPopupOpen(false)} event={eventSelected} />
       }
       <NewEventDialog 
         open={newEventPopupOpen}
         onClose={() => setNewEventPopupOpen(false)} 
-        vacations={vacations} vacation={vacation} 
+        vacation={vacation} 
         event={{ vacationId: vacation.id, start: newEventDateRange?.start, end: newEventDateRange?.end }}
       />
     </div>

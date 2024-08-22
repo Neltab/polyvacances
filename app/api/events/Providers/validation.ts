@@ -2,9 +2,10 @@ import { z } from "zod";
 import { EVENT_TAGS } from "../types";
 import { Vacation } from "@prisma/client";
 
-export type EventSchema = z.infer<ReturnType<typeof getEventSchemaForVacation>>;
+export type CreateEventSchema = z.infer<ReturnType<typeof getCreateEventSchema>>;
+export type UpdateEventSchema = z.infer<ReturnType<typeof getUpdateEventSchema>>;
 
-export const getEventSchemaForVacation = (vacation: Vacation) => {
+const getBaseEventSchemaForVacation = (vacation: Vacation) => {
   return z.object({
     vacationId: z.coerce.number(),
 
@@ -35,7 +36,12 @@ export const getEventSchemaForVacation = (vacation: Vacation) => {
       invalid_type_error: "L'emplacement doit être une chaîne de caractères",
     }),
   })
-  .superRefine((values, ctx) => {
+};
+
+type BaseSchema = z.infer<ReturnType<typeof getBaseEventSchemaForVacation>>;
+
+function refineSchema<T extends BaseSchema>(schema: z.ZodType<T>) {
+  return schema.superRefine((values, ctx) => {
     if (values.start && values.end && values.start > values.end) {
       ctx.addIssue({
         code: "invalid_date",
@@ -49,4 +55,17 @@ export const getEventSchemaForVacation = (vacation: Vacation) => {
       });
     }
   });
+}
+
+export const getCreateEventSchema = (vacation: Vacation) => {
+  const baseSchema = getBaseEventSchemaForVacation(vacation);
+  return refineSchema(baseSchema);
+}
+
+export const getUpdateEventSchema = (vacation: Vacation) => {
+  const baseSchema = getBaseEventSchemaForVacation(vacation);
+  const updateSchema = baseSchema.extend({
+    id: z.number(),
+  });
+  return refineSchema(updateSchema);
 }

@@ -1,7 +1,7 @@
 'use client'
 
-import { useGetEventPhotos, useUploadImages } from "@/app/api/events/Providers/client";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useGetEvent, useGetEventPhotos, useUploadImages } from "@/app/api/events/Providers/client";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Event } from "@/app/api/events/types"
 import { useMemo, useState, useCallback } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -10,22 +10,27 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Vacation } from "@/app/api/vacations/types";
+import EditEventButton from "./EditEventButton";
 
 type EventDialogProps = {
   open: boolean,
+  vacation: Vacation,
   onClose: () => void,
   event: Event,
 }
 
 export default function EventDialog({
   open,
+  vacation,
   onClose,
-  event,
+  event: { id: eventId},
 }: EventDialogProps) {
   const queryClient = useQueryClient();
 
-  const {data: photos, status} = useGetEventPhotos(event.id);
-  const photoMutation = useUploadImages(queryClient, event.id);
+  const { data: event } = useGetEvent(eventId);
+  const { data: photos } = useGetEventPhotos(eventId);
+  const photoMutation = useUploadImages(queryClient, eventId);
 
   const photosSrc = useMemo(() => photos?.map(photo => `${photo.photoUrl}`), [photos])
 
@@ -42,7 +47,7 @@ export default function EventDialog({
     setIsViewerOpen(false);
   };
 
-  if (status !== 'success') {
+  if (!photos || !event) {
     return <div>Loading...</div>
   }
 
@@ -51,7 +56,10 @@ export default function EventDialog({
     <Dialog open={open} onOpenChange={onClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{event.title}</DialogTitle>
+            <DialogTitle className="flex flex-row justify-between">
+              <p>{event.title}</p>
+              <EditEventButton event={event} vacation={vacation} />
+            </DialogTitle>
             <DialogDescription>
               {event.description}
             </DialogDescription>

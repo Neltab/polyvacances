@@ -1,6 +1,6 @@
 import { Params } from "../../types";
-import VacationCalendar from "../../../../../../components/planner/vacations/VacationCalendar";
-import { getMyVacations, getVacationWithEventsByUUID } from "@/app/api/vacations/Providers/server";
+import VacationCalendar from "@/components/planner/vacations/VacationCalendar";
+import { getVacationWithEventsByUUID } from "@/app/api/vacations/Providers/server";
 import { canEditVacation } from "@/app/api/auth/vacation";
 
 type PlanningPageProps = {
@@ -10,7 +10,6 @@ type PlanningPageProps = {
 export default async function Page({ params: { vacationUUID } }: PlanningPageProps) {
 
   const vacation = await getVacationWithEventsByUUID(vacationUUID);
-  const vacations = await getMyVacations();
   const canEdit = await canEditVacation(vacationUUID);
 
   if (!vacation) {
@@ -18,6 +17,6 @@ export default async function Page({ params: { vacationUUID } }: PlanningPagePro
   }
 
   return (
-    <VacationCalendar editable={canEdit} vacations={vacations} vacation={vacation} />
+    <VacationCalendar editable={canEdit} vacation={vacation} />
   )
 }

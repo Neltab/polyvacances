@@ -1,12 +1,11 @@
 'use client';
 
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import { createEvent, getEventsFromVacation, getEventsPhotos, uploadImages } from "./server";
-import { NewEvent } from "../types";
-import { EventSchema } from "./validation";
+import { createEvent, getEvent, getEventsFromVacation, getEventsPhotos, updateEvent, uploadImages } from "./server";
+import { CreateEventSchema, UpdateEventSchema } from "./validation";
 
 export const useGetEventsFromVacation = (vacationId: number) => useQuery({
-  queryKey: ["events", vacationId],
+  queryKey: ["vacationEvents", vacationId],
   queryFn: () => getEventsFromVacation(vacationId),
 });
 
@@ -23,9 +22,22 @@ export const useUploadImages = (queryClient: QueryClient, eventId: number) => us
   },
 });
 
+export const useGetEvent = (eventId: number) => useQuery({
+  queryKey: ["events", eventId],
+  queryFn: () => getEvent(eventId),
+});
+
 export const useCreateEvent = (queryClient: QueryClient) => useMutation({
-  mutationFn: (data: EventSchema) => createEvent(data),
+  mutationFn: (data: CreateEventSchema) => createEvent(data),
   onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["vacationsWithEvents"] })
+  },
+});
+
+export const useUpdateEvent = (queryClient: QueryClient) => useMutation({
+  mutationFn: (data: UpdateEventSchema) => updateEvent(data),
+  onSuccess: ({id}) => {
+    queryClient.invalidateQueries({ queryKey: ["events", id] })
     queryClient.invalidateQueries({ queryKey: ["vacationsWithEvents"] })
   },
 });
