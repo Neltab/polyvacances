@@ -1,9 +1,10 @@
 'use server'
 
-import { canEditVacation, getVacationNavigation } from "@/app/api/vacations/Providers/server";
+import { getVacationNavigation } from "@/app/api/vacations/Providers/server";
 import Link from "next/link";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import NewVacationButton from "../../../../components/planner/vacations/NewVacationButton";
+import { canEditVacation } from "@/app/api/auth/vacation";
 
 type LayoutProps = {
   children: React.ReactNode;

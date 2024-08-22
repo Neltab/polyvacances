@@ -10,6 +10,16 @@ const handler = NextAuth({
     strategy: "jwt",
   },
 
+  callbacks: {
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.id = account.id
+        
+      }
+      return token
+    }
+  },
+
   pages: {
     signIn: '/auth/login',
     signOut: '/auth/logout',

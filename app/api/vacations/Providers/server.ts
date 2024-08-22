@@ -155,27 +155,6 @@ export const getVacationParticipants = async (uuid: string) => {
   return vacation.participants;
 }
 
-export const canEditVacation = async (vacationUUID: string) => {
-  const session = await getServerSession();
-
-  if (!session || !session.user || !session.user.email) {
-    return false;
-  }
-
-  const vacation = await prisma.vacation.findUnique({
-    where: { uuid: vacationUUID },
-    include: {
-      participants: true
-    }
-  });
-
-  if (!vacation) {
-    return false;
-  }
-
-  return vacation.participants.some(participant => participant.email === session.user?.email);
-}
-
 export const updateParticipants = async (vacationUUID: string, data: ParticipantsSchema) => {
   const {participants} = participantsSchema.parse(data);
 

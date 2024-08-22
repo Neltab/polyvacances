@@ -1,3 +1,4 @@
+import { canEditVacation } from "@/app/api/auth/vacation";
 import { getVacationParticipants } from "@/app/api/vacations/Providers/server";
 import ModifyParticipantsButton from "@/components/planner/vacations/ModifyParticipantsButton";
 import { stringAvatar } from "@/lib/utils/avatar";
@@ -11,12 +12,15 @@ type Params = {
 export default async function Page({ params: { vacationUUID } }: { params: Params }) {
 
   const participants = await getVacationParticipants(vacationUUID);
+  const canEdit = await canEditVacation(vacationUUID);
 
   return (
     <div className="flex flex-1 flex-col gap-6">
       <div className="flex justify-between">
         <h2 className="text-2xl font-bold flex-none" style={GRADIENT_STYLE}>Participants</h2>
-        <ModifyParticipantsButton participants={participants} vacationUUID={vacationUUID} />
+        {
+          canEdit && <ModifyParticipantsButton participants={participants} vacationUUID={vacationUUID} />
+        }
       </div>
       <div className="flex flex-col gap-4">
         {participants.map((participant) => (

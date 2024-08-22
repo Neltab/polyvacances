@@ -33,12 +33,14 @@ type Range = { start: Date, end: Date }
 
 type VacationCalendarProps = {
   vacations: VacationWithEvents[],
-  vacation: VacationWithEvents
+  vacation: VacationWithEvents,
+  editable?: boolean,
 }
 
 export default function VacationCalendar({
   vacations,
-  vacation
+  vacation,
+  editable = false,
 }: VacationCalendarProps) {
 
   const session = useSession();
@@ -106,7 +108,7 @@ export default function VacationCalendar({
         views={views}
         eventPropGetter={eventPropGetter}
         onSelectEvent={toggleEventPopup}
-        selectable={!!session.data?.user?.email && vacation.participants.map(participant => participant.email).includes(session.data?.user?.email)}
+        selectable={editable}
         toolbar={false}
         onSelectSlot={onSelectSlot}
       />
