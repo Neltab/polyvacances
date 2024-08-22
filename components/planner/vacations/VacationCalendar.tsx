@@ -8,7 +8,6 @@ import { Event } from '@/app/api/events/types';
 import { COLORS } from '@/lib/utils/colors';
 import getVacationView from './VacationView';
 import { VacationWithEvents } from '@/app/api/vacations/types';
-import { useSession } from 'next-auth/react';
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
@@ -42,8 +41,6 @@ export default function VacationCalendar({
   vacation,
   editable = false,
 }: VacationCalendarProps) {
-
-  const session = useSession();
 
   const formats = useMemo(() => ({
     dayFormat: `EEEE dd.MM`,
@@ -120,7 +117,7 @@ export default function VacationCalendar({
         open={newEventPopupOpen}
         onClose={() => setNewEventPopupOpen(false)} 
         vacations={vacations} vacation={vacation} 
-        event={{ start: newEventDateRange?.start, end: newEventDateRange?.end }}
+        event={{ vacationId: vacation.id, start: newEventDateRange?.start, end: newEventDateRange?.end }}
       />
     </div>
   );
