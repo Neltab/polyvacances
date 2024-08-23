@@ -1,10 +1,11 @@
 'use server'
 
-import { getVacationNavigation } from "@/app/api/vacations/Providers/server";
+import { getVacationByUUID, getVacationNavigation } from "@/app/api/vacations/Providers/server";
 import Link from "next/link";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import NewVacationButton from "../../../../components/planner/vacations/NewVacationButton";
 import { canEditVacation } from "@/app/api/auth/vacation";
+import PlannerTabs from "@/components/planner/PlannerTabs";
+import ModifyVacationButton from "@/components/planner/vacations/ModifyVacationButton";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -17,6 +18,11 @@ export default async function Layout({ children, params: { vacationUUID } }: Lay
 
   const canEdit = await canEditVacation(vacationUUID);
   const vacationNavigation = await getVacationNavigation(vacationUUID);
+  const vacation = await getVacationByUUID(vacationUUID, { participants: true });
+
+  if (!vacation) {
+    return <div>404</div>
+  }
 
   return (
     <div className="flex flex-1 bg-grey-lightest2 min-h-screen">
@@ -29,13 +35,11 @@ export default async function Layout({ children, params: { vacationUUID } }: Lay
           </div>
           {
             canEdit && (
-              <NewVacationButton />
+              <ModifyVacationButton vacation={vacation}/>
             )
           }
         </div>
-        <div className="flex gap-6">
-          Overview
-        </div>
+        <PlannerTabs vacationUUID={vacationUUID} />
         {children}
       </div>
     </div>

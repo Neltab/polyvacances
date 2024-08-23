@@ -46,6 +46,7 @@ export default function VacationCalendar({
 
   const views = useMemo(() => ({
     week: getVacationView(vacation.startDate, vacation.endDate),
+    day: getVacationView(vacation.startDate, vacation.endDate),
   }), [vacation.startDate, vacation.endDate])
 
   const [eventPopupOpen, setEventPopupOpen] = useState(false)

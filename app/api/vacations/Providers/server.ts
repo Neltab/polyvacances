@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/utils/db";
 import { getServerSession } from "next-auth";
-import { participantsSchema, ParticipantsSchema, VacationSchema, vacationSchema } from "./validation";
+import { participantsSchema, ParticipantsSchema, updateVacationSchema, UpdateVacationSchema, VacationSchema, vacationSchema } from "./validation";
 import { revalidatePath } from "next/cache";
 
 export const getVacations = async () => prisma.vacation.findMany({
@@ -36,8 +36,14 @@ export const getMyVacations = async () => {
   });
 }
 
-export const getVacationByUUID = async (uuid: string) => prisma.vacation.findUnique({
-  where: { uuid }
+const defaultInclude = {
+  events: false,
+  participants: false,
+};
+type VacationInclude = Partial<typeof defaultInclude>;
+export const getVacationByUUID = async (uuid: string, include: VacationInclude = defaultInclude) => prisma.vacation.findUnique({
+  where: { uuid },
+  include,
 });
 
 export const getVacationsWithEvents = async () => prisma.vacation.findMany({
@@ -75,6 +81,29 @@ export const createVacation = async (data: VacationSchema) => {
   return newVacation;
 }
 
+export const updateVacation = async (data: UpdateVacationSchema) => {
+  const vacation = updateVacationSchema.parse(data);
+
+  const updatedVacation = await prisma.vacation.update({
+    where: {
+      id: vacation.id,
+    },
+    data: {
+      startDate: vacation.date.from,
+      endDate: vacation.date.to,
+      location: vacation.location,
+      participants: vacation.participants && {
+        set: vacation.participants.map(({value: id, }) =>
+          ({ id })
+        )
+      },
+    }
+  });
+
+  revalidatePath(`/planner`);
+
+  return updatedVacation;
+}
 
 export const getVacationNavigation = async (uuid: string) => {
   const vacation = await prisma.vacation.findUnique({
@@ -172,4 +201,21 @@ export const updateParticipants = async (vacationUUID: string, data: Participant
   revalidatePath(`/planner/vacation/${vacationUUID}/layout`);
 
   return vacation;
+}
+
+export const getVacationPhotos = async (uuid: string) => {
+  const photos = await prisma.eventPhotos.findMany({
+    where: {
+      event: {
+        vacation: {
+          uuid
+        }
+      }
+    },
+    include: {
+      event: true
+    }
+  });
+
+  return photos;
 }
