@@ -19,6 +19,12 @@ export const getEventsPhotos = async (eventId: number) => prisma.eventPhotos.fin
 
 export const uploadImages = async (eventId: number, formData: FormData) => {
   const formDataEntryValues = Array.from(formData.values());
+  const uploadPath = `public/uploads/${eventId}`;
+  const uploadFolderPath = path.join(process.cwd(), uploadPath);
+
+  if (!fs.existsSync(uploadFolderPath)) {
+    fs.mkdirSync(uploadFolderPath, { recursive: true });
+  }
 
   for (const formDataEntryValue of formDataEntryValues) {
     if (
@@ -26,12 +32,18 @@ export const uploadImages = async (eventId: number, formData: FormData) => {
       "arrayBuffer" in formDataEntryValue
     ) {
       const file = formDataEntryValue;
+      const fileName = file.name;
+
+      if (fileName === "undefined") {
+        continue;
+      }
+
       const buffer = Buffer.from(await file.arrayBuffer());
-      const filePath = path.join(process.cwd(), 'public/uploads', file.name);
+      const filePath = path.join(uploadFolderPath, file.name);
       await prisma.eventPhotos.create({
         data: {
           eventId,
-          photoUrl: "/uploads/" + file.name,
+          photoUrl: `/api/${uploadPath}/${file.name}`,
         },
       });
       fs.writeFileSync(filePath, buffer);

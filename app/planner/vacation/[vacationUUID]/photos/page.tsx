@@ -34,7 +34,7 @@ export default async function Photos({
             <h2 className="text-lg">{eventTitle}</h2>
             <div className="flex w-full flex-row overflow-x-scroll gap-4">
               {photos.map((photo) => (
-                <img key={photo.id} src={photo.photoUrl} className="max-h-[250px] object-scale-down" alt="" />
+                <img key={photo.id} src={`/api/public${photo.photoUrl}`} className="max-h-[250px] object-scale-down" alt="" />
               ))}
             </div>
           </div>
