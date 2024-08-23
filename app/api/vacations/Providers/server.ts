@@ -214,7 +214,7 @@ export const getVacationPhotos = async (uuid: string) => {
     },
     include: {
       event: true
-    }
+    },
   });
 
   return photos;

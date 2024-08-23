@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 const TABS = [
   { label: 'Overview', value: 'overview' },
   { label: 'Photos', value: 'photos' },
-  { label: 'Dépenses', value: 'expenses' },
-  { label: 'Sondages', value: 'polls' },
-  { label: 'Réservations', value: 'bookings' },
-  { label: 'Checklists', value: 'checklists' },
+  // { label: 'Dépenses', value: 'expenses' },
+  // { label: 'Sondages', value: 'polls' },
+  // { label: 'Réservations', value: 'bookings' },
+  // { label: 'Checklists', value: 'checklists' },
 ];
 
 const LINK_STYLE = 'text-primary border-b-2 border-primary';
