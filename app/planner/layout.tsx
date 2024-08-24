@@ -25,8 +25,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
     )
   }
   return (
-    <div className="flex flex-row min-h-screen">
-      <div className="shadow flex flex-col p-4 gap-4 w-[256px]">
+    <div className="flex flex-col md:flex-row min-h-screen">
+      <div className="shadow flex flex-row md:flex-col p-4 gap-4 md:w-[256px]">
         <Skeleton className="h-7 w-full" />
         <Skeleton className="h-7 w-full" />
         <Skeleton className="h-7 w-full" />

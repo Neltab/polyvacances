@@ -17,7 +17,7 @@ export default async function Layout({
 }: OverviewProps) {
   return (
     <>
-      <div className="flex gap-6">
+      <div className="flex gap-6 flex-col md:flex-row">
         <div className="flex flex-3">
           <Card>
             {planning}
@@ -29,7 +29,7 @@ export default async function Layout({
           </Card>
         </div>
       </div>
-      <div className="flex gap-6">
+      <div className="flex gap-6 flex-col md:flex-row">
         <div className="flex flex-1">
           <Card>
             {checklists}
