@@ -13,8 +13,8 @@ import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
 import getDay from 'date-fns/getDay'
 import fr from 'date-fns/locale/fr';
-import EventDialog from '../events/EventDialog';
-import NewEventDialog from '../events/NewEventDialog';
+import EventDialog from '../../events/EventDialog';
+import NewEventDialog from '../../events/NewEventDialog';
 
 const locales = {
   'fr': fr,
@@ -41,7 +41,7 @@ export default function VacationCalendar({
 }: VacationCalendarProps) {
 
   const formats = useMemo(() => ({
-    dayFormat: `EEEE dd.MM`,
+    dayFormat: `EEEE dd/MM`,
   }), [])
 
   const views = useMemo(() => ({

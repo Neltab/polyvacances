@@ -11,6 +11,11 @@
   border-bottom: 4px solid #DAE6FF;
 }
 
+.rbc-header {
+  text-align: left;
+  padding-left: 4px
+}
+
 .rbc-header + .rbc-header {
   border-left: 0px;
 }

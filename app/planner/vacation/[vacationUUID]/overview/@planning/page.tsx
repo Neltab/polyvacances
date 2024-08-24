@@ -1,5 +1,5 @@
 import { Params } from "../../types";
-import VacationCalendar from "@/components/planner/vacations/VacationCalendar";
+import VacationCalendar from "@/components/planner/vacations/Calendar/VacationCalendar";
 import { getVacationWithEventsByUUID } from "@/app/api/vacations/Providers/server";
 import { canEditVacation } from "@/app/api/auth/vacation";
 
