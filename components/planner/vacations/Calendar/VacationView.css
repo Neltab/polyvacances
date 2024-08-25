@@ -34,3 +34,7 @@
 .rbc-time-header-content {
   border-left: 0px;
 }
+
+.rbc-time-header-cell-single-day {
+  display: flex !important;
+}

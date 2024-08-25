@@ -12,6 +12,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { grey, red } from '@mui/material/colors'
 import { fr } from 'date-fns/locale/fr';
+import { MediaContextProvider } from '@/components/providers/Media'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -63,7 +64,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <SessionProvider>
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fr}>
-            {children}
+            <MediaContextProvider>
+              {children}
+            </MediaContextProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </SessionProvider>

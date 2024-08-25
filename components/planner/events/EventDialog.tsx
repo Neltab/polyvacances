@@ -54,7 +54,7 @@ export default function EventDialog({
   return (
     <>
     <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent>
+        <DialogContent className="max-h-screen">
           <DialogHeader>
             <DialogTitle className="flex flex-row justify-between">
               <p>{event.title}</p>
@@ -72,7 +72,7 @@ export default function EventDialog({
             <Button type="submit">Ajouter</Button>
           </form>
           <ResponsiveMasonry>
-            <Masonry className="masonry" gutter="10px">
+            <Masonry className="masonry overflow-y-scroll" gutter="10px">
               {photos.map((photo, index) => (
                 <div key={index} className="masonry-item">
                   <img src={`${photo.photoUrl}`} alt="photo" onClick={ () => openImageViewer(index) } />
