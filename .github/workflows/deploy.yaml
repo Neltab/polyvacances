@@ -1,30 +1,53 @@
-U2FsdGVkX1/rGTDaPHcRx6YPKYGrdDIIZYSd7gOezF7p9WKihwq9zBsyAX+cxCab
-D16sIe4MtOHGoUPL/Qpqd6FKdyHvX6nT4wWTXSJObLUHCO0iNHm4QTAoqCqf7X92
-dG1fzOAE4R6lhBHg524u+JLjJOJbUk1mukbc9c9+GfYIZysKJ4oCG/+VO340svAV
-vU6t+yXkmSy1y6gKcqcrwm4syXbkBEuB7WMgGiSV3ZR1I/HKmbqjIyIIDe1U/jfO
-4GOBEtUY8sM7CcRh8KQTSPEPef62aKDwhmih6j9W1QVLxgtZgxSHjHApUMB78om+
-4QEtQFBXfb0CxnjwSORhRxcfXcipIB5EIYBm1xfbnND/ADFis8PbSK7sL/g+piQd
-eQ0WIT5De758r/OdNZ5gStOAQ9lf3K0rr/oq9jCt1oyYIlxVQycbCThF5Q5H0fJX
-PfZvQittcxdCgWlPtl/au8eGiFjnjDhJ2/LGV6NjjQ/xSn86Movkx7XZyoDkRU/X
-TCSvHpIplFckwMvKDQR4PS21vC6Z2Npz/hWsLm0sSySL/KbV47RlKUOIYulehZ8l
-ytr+WBkA0HU1aOTPPOhR7a18zsNrleVchuNALUN25MlmRbKnTPjQxbheBAAIXECk
-B29EMxGtk2gI89z1lhV8bihrFIKCb6kcSXNihpslIEdJlayu6pbcamE6fc5xouKg
-xt2lwXCHgtUAGGehqP2iLtw87Pnyl4AeZGsxmBZ2gNQOCMQsVtS5f/NnurLLeh2V
-U33W3t8JYeEPenLd7Dl5dfv6D4Rx/9+54kFJXxVb343iybSp0yjgvKTkdYEVMhjx
-ajgswh1OktMU1gzZCOiFsXK/5WnwMbVngnSAWIbOSBygCt/6N49bWYd/LEYkOsYF
-7gF4VcVs5I1hqZcxCgpiU58Tus7KNKlM6lFsQtQBQqVUkwWC2uTWplTd3YJI5qTh
-LyTstAfJqEkBGoqMojYMLBHTM5oEjIkoj8JTekyngOfEoeLeEaIq2h/MJG2JCkA6
-roJhZoB+OqzfJGRJh57ak5zNsBd4at8EtKku+cYCQwRIYFk0/SCsq0zncighGlsi
-e4IUMhvAlZz0k71yKXyl4FfVEt/X81RBCu2183xMOEV9A7OuMX3FEKKGGU4Dwpqf
-slQ+f5q0CqSuVBrdFdyQiP8QY2r7nsRHXvo+jID+tQ6Lkoo4WYrwZ3PuAwv8D/Oy
-KabsoWZtwFwHFN2/abTcp2MRzTWW+DXsjXluyMTI54G4A+F6CoygYroQVeYN+Gt4
-bZ9aDxAbhx09j6We8GN1UQhtSMH4clw4TeddSNO4gTE1l8J+NAIZyLEAjEgrqx8m
-HeaXXKyDqaeKdLvMPiDmEXyI0pZDWBFt424oKw/cSSaL3sIY1L786KwHUsEN6jxT
-Haiiok0YxLiUQE7Ol46mPZ6dcqh5JbK4l3EYqA063+GDDNto1qp4NJe3w0/ouINB
-UXcSjBYaVkt7OOqHtD4ziy8rJeDpvtnlzqevTDPiqAg5iwXa3XPGkWKBteiJtvGY
-JLrs/tMLxWN5vuZxgRT7PaLpvWNEkbmGuXXM9Yn24XqhJkv2DRg/CpVK/HcVIiuf
-lsgUa3lSnuAPm2RL2hPC2U/A2hJKsoDfYayEkyFwlBvcEtilJmnMjwEr1lMrVkO3
-z4UsPbtAODBAEvou8HRxm6jL68m2FAj6ze5sxRMP57wrWjdtVNXRIHgIvXydjNlB
-LKbldk//1LLYfYQEx7THj8bJ7cQJ5oQ99CU97/1GzSVaFfjx0JkWfrsw+pwQvTXi
-ji2Zj63XguhMQBEKs+Sx11o+/oD40g6AGjbOEW8FH8TtDJ7uA5cD/trw3vWJr682
-NhhWqiZs81INpUPdaXTnrw==
+name: Deploy to Raspberry Pi
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Determine current live environment
+      id: live-env
+      run: |
+        if pm2 list | grep -q "polyvacances0"; then echo "polyvacances0" > live-env.txt; else echo "polyvacances1" > live-env.txt; fi
+        cat live-env.txt
+
+    - name: Set deployment target
+      id: target-env
+      run: |
+        if [ $(cat live-env.txt) == "polyvacances0" ]; then echo "polyvacances1" > target-env.txt; else echo "polyvacances0" > target-env.txt; fi
+        cat target-env.txt
+
+    - name: Move files to target environment
+      run: |
+        TARGET_ENV=$(cat target-env.txt)
+        mv -vuf * ~/$(cat target-env.txt)
+        mv -vuf .* ~/$(cat target-env.txt)
+
+    - name: Install dependencies
+      run: |
+        cd ~$(cat target-env.txt)
+        yarn install
+
+    - name: Build the app
+      run: |
+        cd ~$(cat target-env.txt)
+        yarn build
+
+    - name: Switch traffic to the new environment
+      run: |
+        LIVE_ENV=$(cat live-env.txt)
+        TARGET_ENV=$(cat target-env.txt)
+        pm2 delete $LIVE_ENV
+        pm2 start yarn --name $TARGET_ENV -- start
+
+    - name: Cleanup old environment
+      run: |
+        rm -rf ~$(cat live-env.txt)/* !(.env*|node_modules)
