@@ -22,28 +22,28 @@ jobs:
     - name: Set deployment target
       id: target-env
       run: |
-        if [ $(cat ~/polyvacances-live-env.txt) == "polyvacances0" ]; then echo "polyvacances1" > target-env.txt; else echo "polyvacances0" > target-env.txt; fi
-        cat target-env.txt
+        if [ $(cat ~/polyvacances-live-env.txt) == "polyvacances0" ]; then echo "polyvacances1" > ~/polyvacances-target-env.txt; else echo "polyvacances0" > ~/polyvacances-target-env.txt; fi
+        cat ~/polyvacances-target-env.txt
 
     - name: Move files to target environment
       run: |
-        TARGET_ENV=$(cat target-env.txt)
-        rsync -av --delete --exclude='.env*' --exclude='public/uploads' ./ ~/$(cat target-env.txt)/
+        TARGET_ENV=$(cat ~/polyvacances-target-env.txt)
+        rsync -av --delete --exclude='.env*' --exclude='public/uploads' ./ ~/$(cat ~/polyvacances-target-env.txt)/
 
     - name: Install dependencies
       run: |
-        cd ~$(cat target-env.txt)
+        cd ~$(cat ~/polyvacances-target-env.txt)
         yarn install
 
     - name: Build the app
       run: |
-        cd ~$(cat target-env.txt)
+        cd ~$(cat ~/polyvacances-target-env.txt)
         yarn build
 
     - name: Switch traffic to the new environment
       run: |
         LIVE_ENV=$(cat ~/polyvacances-live-env.txt)
-        TARGET_ENV=$(cat target-env.txt)
+        TARGET_ENV=$(cat ~/polyvacances-target-env.txt)
         pm2 delete $LIVE_ENV
         pm2 start yarn --name $TARGET_ENV -- start
 
