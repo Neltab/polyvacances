@@ -32,12 +32,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd ~$(cat ~/polyvacances-target-env.txt)
+        cd ~/$(cat ~/polyvacances-target-env.txt)
         yarn install
 
     - name: Build the app
       run: |
-        cd ~$(cat ~/polyvacances-target-env.txt)
+        cd ~/$(cat ~/polyvacances-target-env.txt)
         yarn build
 
     - name: Switch traffic to the new environment
