@@ -42,6 +42,7 @@ jobs:
 
     - name: Switch traffic to the new environment
       run: |
+        cd ~/$(cat ~/polyvacances-target-env.txt)
         LIVE_ENV=$(cat ~/polyvacances-live-env.txt)
         TARGET_ENV=$(cat ~/polyvacances-target-env.txt)
         pm2 delete $LIVE_ENV
