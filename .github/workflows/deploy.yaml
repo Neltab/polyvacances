@@ -16,13 +16,13 @@ jobs:
     - name: Determine current live environment
       id: live-env
       run: |
-        if pm2 list | grep -q "polyvacances0"; then echo "polyvacances0" > live-env.txt; else echo "polyvacances1" > live-env.txt; fi
-        cat live-env.txt
+        if pm2 list | grep -q "polyvacances0"; then echo "polyvacances0" > ~/polyvacances-live-env.txt; else echo "polyvacances1" > ~/polyvacances-live-env.txt; fi
+        cat ~/polyvacances-live-env.txt
 
     - name: Set deployment target
       id: target-env
       run: |
-        if [ $(cat live-env.txt) == "polyvacances0" ]; then echo "polyvacances1" > target-env.txt; else echo "polyvacances0" > target-env.txt; fi
+        if [ $(cat ~/polyvacances-live-env.txt) == "polyvacances0" ]; then echo "polyvacances1" > target-env.txt; else echo "polyvacances0" > target-env.txt; fi
         cat target-env.txt
 
     - name: Move files to target environment
@@ -43,11 +43,11 @@ jobs:
 
     - name: Switch traffic to the new environment
       run: |
-        LIVE_ENV=$(cat live-env.txt)
+        LIVE_ENV=$(cat ~/polyvacances-live-env.txt)
         TARGET_ENV=$(cat target-env.txt)
         pm2 delete $LIVE_ENV
         pm2 start yarn --name $TARGET_ENV -- start
 
     # - name: Cleanup old environment
     #   run: |
-    #     rm -rf ~$(cat live-env.txt)/* !(.env*|node_modules)
+    #     rm -rf ~$(cat ~/polyvacances-live-env.txt)/* !(.env*|node_modules)
