@@ -48,6 +48,6 @@ jobs:
         pm2 delete $LIVE_ENV
         pm2 start yarn --name $TARGET_ENV -- start
 
-    - name: Cleanup old environment
-      run: |
-        rm -rf ~$(cat live-env.txt)/* !(.env*|node_modules)
+    # - name: Cleanup old environment
+    #   run: |
+    #     rm -rf ~$(cat live-env.txt)/* !(.env*|node_modules)
