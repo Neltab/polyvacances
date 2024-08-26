@@ -28,8 +28,7 @@ jobs:
     - name: Move files to target environment
       run: |
         TARGET_ENV=$(cat target-env.txt)
-        mv -vuf * ~/$(cat target-env.txt)
-        mv -vuf .* ~/$(cat target-env.txt)
+        rsync -av --delete --exclude='.env*' --exclude='public/uploads' ./ ~/$(cat target-env.txt)/
 
     - name: Install dependencies
       run: |
@@ -50,4 +49,4 @@ jobs:
 
     # - name: Cleanup old environment
     #   run: |
-    #     rm -rf ~$(cat ~/polyvacances-live-env.txt)/* !(.env*|node_modules)
+    #     rm -rf ~$(cat ~/polyvacances-live-env.txt)/* !(.env*|public/uploads)
