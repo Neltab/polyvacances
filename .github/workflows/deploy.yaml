@@ -35,6 +35,11 @@ jobs:
         cd ~/$(cat ~/polyvacances-target-env.txt)
         yarn install
 
+    - name: Migrate the database
+      run: |
+        cd ~/$(cat ~/polyvacances-target-env.txt)
+        yarn prisma migrate production
+    
     - name: Build the app
       run: |
         cd ~/$(cat ~/polyvacances-target-env.txt)
