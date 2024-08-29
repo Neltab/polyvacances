@@ -19,7 +19,6 @@ export const getEventsPhotos = async (eventId: number) => prisma.eventPhotos.fin
 
 export const uploadImages = async (eventId: number, formData: FormData) => {
   const formDataEntryValues = Array.from(formData.values());
-  console.log(formDataEntryValues);
   const uploadPath = `public/uploads/${eventId}`;
   const uploadFolderPath = path.join(process.cwd(), uploadPath);
 
@@ -33,7 +32,6 @@ export const uploadImages = async (eventId: number, formData: FormData) => {
       "arrayBuffer" in formDataEntryValue
     ) {
       const file = formDataEntryValue;
-      console.log(file);
       const fileName = file.name;
 
       if (fileName === "undefined") {
@@ -89,7 +87,7 @@ export const createEvent = async (data: CreateEventSchema) => {
     },
   });
   
-  revalidatePath(`/planner/${vacation.id}/overview/@planning`);
+  revalidatePath(`/planner/vacation/${vacation.uuid}/overview/@planning`);
 
   return newEvent;
 
@@ -123,7 +121,7 @@ export const updateEvent = async (data: UpdateEventSchema) => {
     },
   });
 
-  revalidatePath(`/planner/${vacation.id}/overview/@planning`);
+  revalidatePath(`/planner/vacation/${vacation.uuid}/overview/@planning`);
 
   return updatedEvent;
 }

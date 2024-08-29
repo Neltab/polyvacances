@@ -10,6 +10,7 @@ import { parse } from "date-fns/parse";
 import { format } from "date-fns/format";
 import { Event } from "../../events/types";
 import { isWithinInterval } from "date-fns";
+import { revalidatePath } from "next/cache";
 
 
 export const uploadFiles = async (eventId: number, data: FilesSchema) => {
@@ -82,7 +83,6 @@ export const uploadFilesBulk = async (vacationUUID: string, data: FormData) => {
   }
 
   const {eventPhotos, vacationPhotos} = await getEventAndVacationPhotos(creationDates, files, vacation.events, vacationUUID);
-  console.log(eventPhotos, vacationPhotos);
 
   await prisma.eventPhotos.createMany({
     data: eventPhotos.map(({eventId, photoUrl}) => ({ eventId, photoUrl: `/api/${photoUrl}` })),
@@ -114,5 +114,5 @@ export const uploadFilesBulk = async (vacationUUID: string, data: FormData) => {
     fs.writeFileSync(filePath, buffer);
   });
 
-
+  revalidatePath(`/planner/vacation/${vacationUUID}/photos`);
 };
