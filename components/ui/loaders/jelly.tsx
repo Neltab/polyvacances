@@ -5,7 +5,7 @@ import { LoaderProps } from './types';
 
 export default function Jelly({
   color = "white",
-  size = 16,
+  size = "16",
   speed,
 }: LoaderProps) {
   useEffect(() => {
