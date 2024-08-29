@@ -25,6 +25,7 @@ model Vacation {
 
   events Event[]
   participants  User[]
+  photos VacationPhotos[]
 }
 
 enum tag {
@@ -54,6 +55,16 @@ model Event {
   vacation    Vacation @relation(fields: [vacationId], references: [id], onDelete: Cascade)
 
   eventPhotos EventPhotos[]
+}
+
+model VacationPhotos {
+  id          Int      @id @default(autoincrement())
+  photoUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  vacationUUID  String
+  vacation    Vacation @relation(fields: [vacationUUID], references: [uuid], onDelete: Cascade)
 }
 
 model EventPhotos {

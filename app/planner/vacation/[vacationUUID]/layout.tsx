@@ -7,6 +7,19 @@ import { canEditVacation } from "@/app/api/auth/vacation";
 import PlannerTabs from "@/components/planner/PlannerTabs";
 import ModifyVacationButton from "@/components/planner/vacations/ModifyVacationButton";
 
+type GenerateMetadataProps = {
+  params: {
+    vacationUUID: string;
+  };
+}
+
+export async function generateMetadata({ params: { vacationUUID } }: GenerateMetadataProps) {
+  const vacation = await getVacationByUUID(vacationUUID);
+  return {
+    title: `${vacation?.location} - Planner`,
+  }
+}
+
 type LayoutProps = {
   children: React.ReactNode;
   params: {

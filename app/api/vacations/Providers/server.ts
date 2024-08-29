@@ -204,7 +204,7 @@ export const updateParticipants = async (vacationUUID: string, data: Participant
 }
 
 export const getVacationPhotos = async (uuid: string) => {
-  const photos = await prisma.eventPhotos.findMany({
+  const eventPhotos = await prisma.eventPhotos.findMany({
     where: {
       event: {
         vacation: {
@@ -217,5 +217,13 @@ export const getVacationPhotos = async (uuid: string) => {
     },
   });
 
-  return photos;
+  const vacationPhotos = await prisma.vacationPhotos.findMany({
+    where: {
+      vacation: {
+        uuid
+      }
+    },
+  });
+
+  return {eventPhotos, vacationPhotos};
 }

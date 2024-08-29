@@ -2,7 +2,7 @@ import { canEditVacation } from "@/app/api/auth/vacation";
 import { getVacationParticipants } from "@/app/api/vacations/Providers/server";
 import ModifyParticipantsButton from "@/components/planner/vacations/ModifyParticipantsButton";
 import { stringAvatar } from "@/lib/utils/avatar";
-import { GRADIENT_STYLE } from "@/lib/utils/colors";
+import { GRADIENT_STYLE } from "@/lib/utils/constants";
 import { Avatar } from "@mui/material";
 
 type Params = {

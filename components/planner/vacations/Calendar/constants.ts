@@ -1,4 +1,4 @@
-import { COLORS } from "@/lib/utils/colors";
+import { COLORS } from "@/lib/utils/constants";
 import { Event } from "@/app/api/events/types";
 import { fr } from "date-fns/locale/fr";
 import { dateFnsLocalizer } from "react-big-calendar";

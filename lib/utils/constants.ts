@@ -43,3 +43,5 @@ export const GRADIENT_STYLE = {
   backgroundClip: 'text',
   textFillColor: 'transparent',
 } as const;
+
+export const UPLOAD_PATH = "public/uploads";

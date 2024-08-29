@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { TbBeach } from "react-icons/tb";
 import SignInButton from "@/components/planner/SignInButton";
 import { getServerSession } from "next-auth";
+import { getVacationByUUID } from "../api/vacations/Providers/server";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession();
