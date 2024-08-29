@@ -25,7 +25,7 @@ export default function UploadFilesBulkForm({
     resolver: zodResolver(filesSchema)
   });
 
-  const files = useUploadFilesBulk(queryClient, vacationUUID);
+  const filesMutation = useUploadFilesBulk(queryClient, vacationUUID);
 
   const onSubmit = async (data: FilesSchema) => {
     const formData = new FormData();
@@ -37,7 +37,7 @@ export default function UploadFilesBulkForm({
 
     await Promise.all(promises);
 
-    files.mutate(formData);
+    filesMutation.mutate(formData);
   }
   
   return (
@@ -52,7 +52,7 @@ export default function UploadFilesBulkForm({
           <FormMessage />
         </FormItem>
       </div>
-      <Button type="submit">Ajouter</Button>
+      <Button status={filesMutation.status} type="submit">Ajouter</Button>
     </form>
   </Form>
   )

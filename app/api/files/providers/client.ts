@@ -13,7 +13,7 @@ export const useUploadFiles = (queryClient: QueryClient, eventId: number) => use
 });
 
 export const useUploadFilesBulk = (queryClient: QueryClient, vacationUUID: string) => useMutation({
-  mutationFn: async (data: FormData) => {console.log(vacationUUID); uploadFilesBulk(vacationUUID, data)},
+  mutationFn: async (data: FormData) => uploadFilesBulk(vacationUUID, data),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["vacationsWithEvents"] })
     queryClient.invalidateQueries({ queryKey: ["eventPhotos"] })

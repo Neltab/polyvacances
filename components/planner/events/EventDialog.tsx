@@ -37,6 +37,7 @@ export default function EventDialog({
   const { data: event } = useGetEvent(eventId);
   const { data: photos } = useGetEventPhotos(eventId);
   const photoMutation = useUploadImages(queryClient, eventId);
+  console.log(photoMutation)
 
   const photosSrc = useMemo(() => photos?.map(photo => `${photo.photoUrl}`), [photos])
 
@@ -75,7 +76,7 @@ export default function EventDialog({
                   <Label>Ajouter des photos</Label>
                   <Input multiple accept="image/png, image/jpeg, video/mp4" type="file" name="files"/>
               </div>
-              <Button type="submit">Ajouter</Button>
+              <Button status={photoMutation.status} type="submit">Ajouter</Button>
             </form>
           <ResponsiveMasonry>
             <Masonry className="masonry overflow-y-scroll max-h-96" gutter="10px">

@@ -75,7 +75,7 @@ export default function ModifyParticipantsButton({
                   </FormItem>
                 )}
               />              
-              <Button type="submit" className="flex-none">Envoyer</Button>
+              <Button status={participantsMutation.status} type="submit" className="flex-none">Envoyer</Button>
             </form>
           </Form>
         </DialogContent>

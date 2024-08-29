@@ -37,8 +37,11 @@ const NewVacationForm = ({
   const createVacationMutation = useCreateVacation(queryClient);
   const updateVacationMutation = useUpdateVacation(queryClient);
 
+  const isUpdate = vacation && "id" in vacation;
+  const usedMutation = isUpdate ? updateVacationMutation : createVacationMutation;
+
   const onSubmit: SubmitHandler<VacationSchema> = (data) => {
-    if (vacation) {
+    if (isUpdate) {
       updateVacationMutation.mutate({...data, id: vacation.id}, {
         onSuccess: () => { toggleOpen() }
       });
@@ -106,7 +109,7 @@ const NewVacationForm = ({
           )}
         />
         
-        <Button type="submit" className="flex-none">Envoyer</Button>
+        <Button status={usedMutation.status} type="submit" className="flex-none">Envoyer</Button>
       </form>
     </Form>
   );

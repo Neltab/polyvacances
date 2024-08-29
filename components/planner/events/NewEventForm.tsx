@@ -41,9 +41,12 @@ export const NewEventForm = ({ toggleOpen, event, vacation }: NewEventPopupProps
 
   const createEventMutation = useCreateEvent(queryClient);
   const updateEventMutation = useUpdateEvent(queryClient);
+
+  const isUpdate = event && "id" in event;
+  const usedMutation = isUpdate ? updateEventMutation : createEventMutation;
   
   const onSubmit: SubmitHandler<CreateEventSchema> = (data) => {
-    if (event && "id" in event) {
+    if (isUpdate) {
       updateEventMutation.mutate({...data, id: event.id}, {
         onSuccess: () => { toggleOpen() }
       });
@@ -164,7 +167,7 @@ export const NewEventForm = ({ toggleOpen, event, vacation }: NewEventPopupProps
           )}
         />
 
-        <Button type="submit" className="flex-none">Envoyer</Button>
+        <Button status={usedMutation.status} type="submit" className="flex-none">Envoyer</Button>
       </form>
     </Form>
   )

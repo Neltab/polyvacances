@@ -47,7 +47,7 @@ export default function RegisterForm() {
         <Controller name="name" control={control} render={({field}) => (
           <TextField type="text" label="Nom" {...field} />
         )}/>
-        <Button type="submit">Connexion</Button>
+        <Button status={userMutation.status} type="submit">Connexion</Button>
       </form>
       <Link href={`/auth/login?callbackUrl=${callbackUrl}`} className="text-secondary underline">Se connecter</Link>
     </>

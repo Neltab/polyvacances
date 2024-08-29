@@ -36,6 +36,7 @@
     "date-fns": "^3.6.0",
     "exifreader": "^4.23.3",
     "gray-matter": "^4.0.3",
+    "ldrs": "^1.0.2",
     "lucide-react": "^0.428.0",
     "next": "^14.2.5",
     "next-auth": "^4.24.7",

@@ -9,7 +9,6 @@ export async function GET(request: Request, {params: {filePath}}: {params: Param
 
   const mergedFilePath = filePath.filter(path => path !== "..").join('/');
   const finalPath = path.join(process.cwd(), 'public', mergedFilePath)
-  console.log(finalPath);
   const file = fs.readFileSync(finalPath);
   return new Response(file, { headers: { 'content-type': 'image/png' } });
 }
