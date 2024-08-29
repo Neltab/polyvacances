@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import ExifReader from 'exifreader';
 import { parse } from "date-fns/parse";
+import { Label } from "@/components/ui/label";
 
 type EventDialogProps = {
   open: boolean,
@@ -32,9 +33,6 @@ export default function EventDialog({
   event: { id: eventId},
 }: EventDialogProps) {
   const queryClient = useQueryClient();
-  const form = useForm<FilesSchema>({
-    resolver: zodResolver(filesSchema)
-  });
 
   const { data: event } = useGetEvent(eventId);
   const { data: photos } = useGetEventPhotos(eventId);
@@ -55,21 +53,6 @@ export default function EventDialog({
     setIsViewerOpen(false);
   };
 
-  const onSubmit: SubmitHandler<FilesSchema> = async (data) => {
-    const test = Array.from(data.files).map(async (element) => {
-      const {exif} = await ExifReader.load(element, {expanded: true, includeUnknown: true});
-      const now = new Date();
-      console.log(
-        parse(exif?.DateTimeOriginal?.value[0] || "", "yyyy:MM:dd HH:mm:ss", now),
-        parse(exif?.DateTimeDigitized?.value[0] || "", "yyyy:MM:dd HH:mm:ss", now),
-        parse(exif?.DateTime?.value[0] || "", "yyyy:MM:dd HH:mm:ss", now),
-        new Date(element.lastModified)
-      );
-    });
-    console.log(await Promise.all(test));
-    // photoMutation.mutate(data);
-  }
-
   if (!photos || !event) {
     return <div>Loading...</div>
   }
@@ -87,20 +70,13 @@ export default function EventDialog({
               {event.description}
             </DialogDescription>
           </DialogHeader>
-          <Form {...form}>
-            <form className="flex justify-between w-full items-center gap-1.5" onSubmit={form.handleSubmit(onSubmit)}>
+            <form className="flex justify-between w-full items-center gap-1.5" action={photoMutation.mutate}>
               <div>
-                <FormItem>
-                  <FormLabel>Ajouter des photos</FormLabel>
-                  <FormControl>
-                    <Input multiple accept="image/png, image/jpeg, video/mp4" type="file" {...form.register("files")} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  <Label>Ajouter des photos</Label>
+                  <Input multiple accept="image/png, image/jpeg, video/mp4" type="file" name="files"/>
               </div>
               <Button type="submit">Ajouter</Button>
             </form>
-          </Form>
           <ResponsiveMasonry>
             <Masonry className="masonry overflow-y-scroll max-h-96" gutter="10px">
               {photos.map((photo, index) => (

@@ -42,14 +42,17 @@ export default async function Photos({
           </Card>
         ))
       }
-      <Card className="flex-none flex flex-col gap-2">
-        <h2 className="text-lg font-bold">Autres photos</h2>
-        <div className="flex w-full flex-row overflow-x-scroll gap-4">
-          {vacationPhotos.map((photo) => (
-            <img key={photo.id} src={photo.photoUrl} className="max-h-[250px] object-scale-down" alt="" />
-          ))}
-        </div>
-      </Card>
+      {
+        vacationPhotos.length > 0 && 
+        <Card className="flex-none flex flex-col gap-2">
+          <h2 className="text-lg font-bold">Autres photos</h2>
+          <div className="flex w-full flex-row overflow-x-scroll gap-4">
+            {vacationPhotos.map((photo) => (
+              <img key={photo.id} src={photo.photoUrl} className="max-h-[250px] object-scale-down" alt="" />
+            ))}
+          </div>
+        </Card>
+      }
     </>
   )
 }
