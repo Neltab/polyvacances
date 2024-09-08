@@ -57,11 +57,17 @@ model Event {
   eventPhotos EventPhotos[]
 }
 
+enum type {
+  photo
+  video
+}
+
 model VacationPhotos {
   id          Int      @id @default(autoincrement())
   photoUrl    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  type        type     @default(photo)
   
   vacationUUID  String
   vacation    Vacation @relation(fields: [vacationUUID], references: [uuid], onDelete: Cascade)
@@ -72,6 +78,7 @@ model EventPhotos {
   photoUrl    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  type        type     @default(photo)
   
   eventId     Int
   event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)

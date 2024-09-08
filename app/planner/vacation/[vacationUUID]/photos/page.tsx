@@ -27,6 +27,9 @@ export default async function Photos({
     return acc;
   }, {} as Record<string, EventPhotos[]>);
 
+  // console.log(photosByEvent);
+  console.log(vacationPhotos);
+
   return (
     <>
       <UploadFilesBulkForm vacationUUID={vacationUUID} />
@@ -36,7 +39,11 @@ export default async function Photos({
               <h2 className="text-lg font-bold">{eventTitle}</h2>
               <div className="flex w-full flex-row overflow-x-scroll gap-4">
                 {photos.map((photo) => (
-                  <img key={photo.id} src={photo.photoUrl} className="max-h-[250px] object-scale-down" alt="" />
+                  photo.type === "video" 
+                  ? <video key={photo.id} className="max-h-[250px] object-scale-down" controls >
+                      <source src={photo.photoUrl} type="video/mp4"/>
+                    </video>
+                  : <img key={photo.id} src={photo.photoUrl} className="max-h-[250px] object-scale-down" alt="" />
                 ))}
               </div>
           </Card>
@@ -48,7 +55,11 @@ export default async function Photos({
           <h2 className="text-lg font-bold">Autres photos</h2>
           <div className="flex w-full flex-row overflow-x-scroll gap-4">
             {vacationPhotos.map((photo) => (
-              <img key={photo.id} src={photo.photoUrl} className="max-h-[250px] object-scale-down" alt="" />
+              photo.type === "video" 
+              ? <video key={photo.id} className="max-h-[250px] object-scale-down" controls >
+                  <source src={photo.photoUrl} type="video/mp4"/>
+                </video>
+              : <img key={photo.id} src={photo.photoUrl} className="max-h-[250px] object-scale-down" alt="" />
             ))}
           </div>
         </Card>

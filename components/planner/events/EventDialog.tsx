@@ -5,19 +5,16 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Event } from "@/app/api/events/types"
 import { useMemo, useState, useCallback } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import ImageViewer from 'react-simple-image-viewer';
 import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Vacation } from "@/app/api/vacations/types";
 import EditEventButton from "./EditEventButton";
-import { FilesSchema, filesSchema } from "@/app/api/files/providers/validation";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import ExifReader from 'exifreader';
-import { parse } from "date-fns/parse";
+//@ts-ignore
+import ReactImageVideoLightbox from "react-image-video-viewer";
 import { Label } from "@/components/ui/label";
+//@ts-ignore
+import VideoThumbnail from 'react-video-thumbnail';
 
 type EventDialogProps = {
   open: boolean,
@@ -37,9 +34,11 @@ export default function EventDialog({
   const { data: event } = useGetEvent(eventId);
   const { data: photos } = useGetEventPhotos(eventId);
   const photoMutation = useUploadImages(queryClient, eventId);
-  console.log(photoMutation)
 
-  const photosSrc = useMemo(() => photos?.map(photo => `${photo.photoUrl}`), [photos])
+  const photosSrc = useMemo(() => photos?.map(photo => ({
+    url: photo.photoUrl,
+    type: photo.type,
+  })), [photos])
 
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -81,8 +80,12 @@ export default function EventDialog({
           <ResponsiveMasonry>
             <Masonry className="masonry overflow-y-scroll max-h-96" gutter="10px">
               {photos.map((photo, index) => (
-                <div key={index} className="masonry-item">
-                  <img src={`${photo.photoUrl}`} alt="photo" onClick={ () => openImageViewer(index) } />
+                <div key={index} className="masonry-item" onClick={ () => openImageViewer(index) } >
+                  {
+                    photo.type === "video" 
+                    ? <VideoThumbnail videoUrl={`${photo.photoUrl}` } snapshotAtTime={0}/>
+                    : <img src={`${photo.photoUrl}`} alt="photo"/>
+                  }
                 </div>
               ))}
               </Masonry>
@@ -90,15 +93,22 @@ export default function EventDialog({
         </DialogContent>
       </Dialog>
       <Dialog open={isViewerOpen} onOpenChange={closeImageViewer}>
-        <DialogContent className="w-screen h-screen max-w-none max-h-none">
+        <DialogContent className="w-screen h-screen max-w-none max-h-none image-video-dialog">
           {isViewerOpen && photosSrc && (
-            <ImageViewer
-              src={ photosSrc }
-              currentIndex={ currentImage }
-              disableScroll={ false }
-              closeOnClickOutside={ true }
-              onClose={ closeImageViewer }
-            />
+            <>
+              <style>{`
+                .image-video-dialog > div > div {
+                  z-index: 9999;
+                }
+              `}</style>
+              <ReactImageVideoLightbox
+                data={ photosSrc }
+                startIndex={ currentImage }
+                // disableScroll={ false }
+                // closeOnClickOutside={ true }
+                onCloseCallback={ closeImageViewer }
+                />
+            </>
           )}
         </DialogContent>
       </Dialog>

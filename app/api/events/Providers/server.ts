@@ -44,6 +44,7 @@ export const uploadImages = async (eventId: number, formData: FormData) => {
         data: {
           eventId,
           photoUrl: `/api/${uploadPath}/${file.name}`,
+          type: file.name.endsWith(".mp4") ? "video" : "photo",
         },
       });
       fs.writeFileSync(filePath, buffer);

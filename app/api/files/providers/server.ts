@@ -11,6 +11,7 @@ import { format } from "date-fns/format";
 import { Event } from "../../events/types";
 import { isWithinInterval } from "date-fns";
 import { revalidatePath } from "next/cache";
+import { type } from "@prisma/client";
 
 
 export const uploadFiles = async (eventId: number, data: FilesSchema) => {
@@ -56,6 +57,8 @@ const getEventAndVacationPhotos = async (filesCreationDates: string[], files: Fi
   return {eventPhotos, vacationPhotos};
 }
 
+type Type = type;
+
 export const uploadFilesBulk = async (vacationUUID: string, data: FormData) => {
   const creationDatesAndFiles = Object.fromEntries(data.entries());
 
@@ -85,11 +88,11 @@ export const uploadFilesBulk = async (vacationUUID: string, data: FormData) => {
   const {eventPhotos, vacationPhotos} = await getEventAndVacationPhotos(creationDates, files, vacation.events, vacationUUID);
 
   await prisma.eventPhotos.createMany({
-    data: eventPhotos.map(({eventId, photoUrl}) => ({ eventId, photoUrl: `/api/${photoUrl}` })),
+    data: eventPhotos.map(({eventId, photoUrl}) => ({ eventId, photoUrl: `/api/${photoUrl}`, type: photoUrl.endsWith(".mp4") ? "video" : "photo" })),
   });
 
   await prisma.vacationPhotos.createMany({
-    data: vacationPhotos.map(({vacationUUID, photoUrl}) => ({ vacationUUID, photoUrl: `/api/${photoUrl}` })),
+    data: vacationPhotos.map(({vacationUUID, photoUrl}) => ({ vacationUUID, photoUrl: `/api/${photoUrl}`, type: photoUrl.endsWith(".mp4") ? "video" : "photo" })),
   });
   
   eventPhotos.forEach(async ({photoUrl, fileIndex}) => {
